@@ -112,35 +112,34 @@ const Hero = () => {
         >
           {/* Orbits */}
           <motion.div 
-            style={{ position: 'absolute', width: '350px', height: '350px', border: '1px dashed rgba(0,240,255,0.3)', borderRadius: '50%' }}
+            className="hero-orbit hero-orbit-outer"
             animate={{ rotate: 360 }}
             transition={{ repeat: Infinity, duration: 40, ease: 'linear' }}
           />
           <motion.div 
-            style={{ position: 'absolute', width: '250px', height: '250px', border: '1px dashed rgba(157,0,255,0.4)', borderRadius: '50%' }}
+            className="hero-orbit hero-orbit-mid"
             animate={{ rotate: -360 }}
             transition={{ repeat: Infinity, duration: 25, ease: 'linear' }}
           />
           <motion.div 
-            style={{ position: 'absolute', width: '150px', height: '150px', border: '2px solid rgba(255,255,255,0.1)', borderRadius: '50%' }}
+            className="hero-orbit hero-orbit-inner"
             animate={{ rotate: 360 }}
             transition={{ repeat: Infinity, duration: 15, ease: 'linear' }}
           />
 
           {/* Coder Character */}
           <motion.div 
-            className="astronaut"
+            className="astronaut hero-astronaut"
             animate={{ y: [-15, 15, -15] }}
             transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
-            style={{ fontSize: '8rem', color: '#fff', filter: 'drop-shadow(0 0 20px var(--accent-cyan))' }}
           >
             <FaLaptopCode />
           </motion.div>
           
           <motion.div 
+            className="hero-code-icon"
             animate={{ y: [10, -10, 10], rotate: [0, 10, -10, 0] }}
             transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
-            style={{ position: 'absolute', top: '20%', right: '20%', fontSize: '3rem', color: 'var(--accent-purple)' }}
           >
             <FaCode />
           </motion.div>

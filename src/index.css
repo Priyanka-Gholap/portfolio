@@ -676,8 +676,10 @@ footer {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
   z-index: -10;
   overflow: hidden;
   pointer-events: none;
@@ -1142,6 +1144,39 @@ footer {
   }
 }
 
+/* Hero Orbits and Astronaut Illustration Styles */
+.hero-orbit {
+  position: absolute;
+  border-radius: 50%;
+}
+.hero-orbit-outer {
+  width: 350px;
+  height: 350px;
+  border: 1px dashed rgba(0,240,255,0.3);
+}
+.hero-orbit-mid {
+  width: 250px;
+  height: 250px;
+  border: 1px dashed rgba(157,0,255,0.4);
+}
+.hero-orbit-inner {
+  width: 150px;
+  height: 150px;
+  border: 2px solid rgba(255,255,255,0.1);
+}
+.hero-astronaut {
+  font-size: 8rem;
+  color: #fff;
+  filter: drop-shadow(0 0 20px var(--accent-cyan));
+}
+.hero-code-icon {
+  position: absolute;
+  top: 20%;
+  right: 20%;
+  font-size: 3rem;
+  color: var(--accent-purple);
+}
+
 /* Custom CSS for Alignment Adjustments */
 .hero-left-col {
   text-align: left;
@@ -1506,6 +1541,49 @@ footer {
   footer p {
     font-size: 0.8rem !important;
     line-height: 1.4 !important;
+  }
+
+  /* Hero Orbits Mobile Scaling */
+  .hero-orbit-outer {
+    width: 260px !important;
+    height: 260px !important;
+  }
+  .hero-orbit-mid {
+    width: 180px !important;
+    height: 180px !important;
+  }
+  .hero-orbit-inner {
+    width: 110px !important;
+    height: 110px !important;
+  }
+  .hero-astronaut {
+    font-size: 5rem !important;
+  }
+  .hero-code-icon {
+    font-size: 2rem !important;
+    top: 15% !important;
+    right: 15% !important;
+  }
+
+  /* Development Activity Card Padding & Scrollable Grid */
+  .activity-card-main {
+    padding: 20px !important;
+  }
+  .github-calendar-grid {
+    min-width: 550px !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+  }
+
+  /* Global Mobile Viewport Bounds & Padding Guard */
+  html, body {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+  
+  .container {
+    padding: 0 16px !important; /* Perfect mobile side gutters */
+    box-sizing: border-box !important;
   }
 }
 
