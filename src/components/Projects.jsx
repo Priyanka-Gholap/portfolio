@@ -6,7 +6,7 @@ import { FaGithub, FaGlobe, FaTimes, FaDatabase, FaLock, FaMobileAlt, FaCloudUpl
 const featuredProjects = [
   {
     title: 'Smart Society Hub',
-    description: 'Multi-tenant SaaS platform utilizing MongoDB data isolation, role-based controls, and a centralized complaints tracking dashboard.',
+    description: 'An enterprise-grade multi-tenant SaaS application built to digitize residential society operations. Features strict tenant data isolation, role-based access control (RBAC) gating endpoints for Admins and Residents, and a centralized complaints ticket tracking workflow. The dashboard aggregates real-time metrics, helping society administrators manage maintenance billing, track service staff schedules, and streamline communication across 100+ apartment units.',
     tech: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'JWT', 'REST APIs'],
     github: 'https://github.com/Priyanka-Gholap/smart-society-hub.git',
     link: '#',
@@ -42,7 +42,7 @@ server/
   },
   {
     title: 'ToggleNest',
-    description: 'Full-stack MERN task management application featuring authentication, real-time task status toggling, and interactive workspace dashboard.',
+    description: 'A collaborative task and project management dashboard featuring robust JWT-based user authentication, workspace segregation, and a live tracking panel. It enables team members to organize task lists, assign items, and toggle statuses in real time. The frontend communicates with a RESTful Express server, using optimized state updates to synchronize client views with MongoDB Atlas changes instantaneously.',
     tech: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'REST APIs'],
     github: 'https://github.com/ValayaDase/ToggleNest.git',
     link: 'https://togglenest123.netlify.app/',
@@ -76,7 +76,7 @@ src/
   },
   {
     title: 'CineMatch',
-    description: 'Movie discovery web application featuring search filters, category tags, and quiz-based selections using TMDb REST API.',
+    description: 'A dynamic client-side movie discovery platform powered by the TMDb API. It features interactive category filtering, live debounced search queries, and custom local storage watchlists. Built using React context to manage global user states, the application includes a quiz-based recommendation module that suggests curated films by analyzing genre and release date preferences.',
     tech: ['React.js', 'TMDb API', 'CSS', 'JavaScript'],
     github: '#',
     link: 'https://cinematch-4bc6f.web.app',
@@ -109,7 +109,7 @@ src/
   },
   {
     title: 'AI Resume Analyzer',
-    description: 'Predictive analysis web platform using Python NLP models to extract CV keywords and evaluate candidate-job descriptions relevance.',
+    description: 'A machine learning platform designed to streamline recruitment. It parses uploaded resume PDFs using custom regex and tokenizers, extracts key skill terms, and runs TF-IDF vector similarity models to compare resumes against job descriptions. The server returns detailed relevance score metrics, keyword match percentages, and automated suggestions for missing skills.',
     tech: ['Python', 'Machine Learning', 'Pandas', 'NLP'],
     github: 'https://github.com/Priyanka-Gholap/ai-resume-analyzer.git',
     link: 'https://ai-resume-analyzer-bxmz.onrender.com',
@@ -143,7 +143,7 @@ analyzer/
   },
   {
     title: 'Virtual Banking System',
-    description: 'A structural Java desktop application simulating account creation, transaction registers, and balance transfers using OOP.',
+    description: 'A multi-threaded desktop banking simulation application developed in Java. It models core banking operations including secure user logins, account creation, deposits, withdrawals, and inter-account transfers. The system utilizes synchronized thread blocks to prevent transaction collisions, maintains local audit logs, and formats structured ledger receipts using Object-Oriented patterns.',
     tech: ['Java'],
     github: '#',
     link: '#',
@@ -176,7 +176,7 @@ src/
   },
   {
     title: 'DSA Learning Platform',
-    description: 'Interactive visualization platform displaying step-by-step trace animations of key Data Structures and Algorithms.',
+    description: 'An educational web portal designed to visualize sorting and pathfinding algorithms in real-time. Built using React and Framer Motion, it translates array swaps and traversal states into interactive color-coded bar animations. It uses asynchronous generator yielding to control execution speed, allowing students to pause, step, and analyze runtime complexity traces.',
     tech: ['React.js', 'JavaScript', 'Framer Motion', 'CSS'],
     github: 'https://github.com/Priyanka-Gholap/DSA-Master.git',
     link: 'https://dsa-master-phi.vercel.app/',
@@ -209,7 +209,7 @@ src/
   },
   {
     title: 'RCB Verse',
-    description: 'Sports-themed frontend application dedicated to RCB featuring dynamic layouts, rosters, and custom UI sections.',
+    description: 'An immersive, sports-themed frontend fan portal designed for the Royal Challengers Bengaluru cricket franchise. It features high-fidelity CSS grid layouts, interactive player roster cards with 3D parallax hover perspectives, and dynamic team history timelines. Engineered with lazy-loading graphic configurations and responsive assets to ensure fast page load times and fluid mobile animations.',
     tech: ['React.js', 'JavaScript', 'CSS', 'Framer Motion'],
     github: 'https://github.com/Priyanka-Gholap/rcbverse.git',
     link: 'https://rcbverse.netlify.app/',
@@ -264,7 +264,7 @@ const SpotlightCard = ({ children, isActive, onClick }) => {
       style={{
         position: 'relative',
         overflow: 'hidden',
-        padding: '36px 40px', /* Significantly increased padding (from 28px 32px) */
+        padding: '36px 40px',
         cursor: 'pointer',
         border: isActive ? '1px solid var(--accent-cyan)' : '1px solid rgba(255,255,255,0.06)',
         background: isActive ? 'rgba(0, 240, 255, 0.04)' : 'rgba(255, 255, 255, 0.015)',
@@ -383,7 +383,7 @@ const Projects = () => {
         <div className="projects-grid-layout" style={{ 
           display: 'grid', 
           gridTemplateColumns: isMobile ? '1fr' : '1.35fr 1.65fr', 
-          gap: '50px', 
+          gap: '40px', 
           alignItems: 'stretch' 
         }}>
           
@@ -391,8 +391,8 @@ const Projects = () => {
           <div style={{ 
             display: 'flex', 
             flexDirection: 'column', 
-            gap: '32px', /* Expanded gaps between cards (from 24px) */
-            maxHeight: '780px', /* Sized up scroll bounds */
+            gap: '32px', 
+            maxHeight: '780px', 
             overflowY: 'auto', 
             paddingRight: '15px' 
           }} className="custom-scroll-container">
