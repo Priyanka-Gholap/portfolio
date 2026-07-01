@@ -98,51 +98,53 @@ const DevelopmentActivity = () => {
           marginTop: '40px' 
         }}>
           
-          {/* Left Column: Contribution Grid */}
-          <motion.div 
-            className="glass activity-card-main"
-            initial={{ opacity: 0, x: -30 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            style={{ padding: '30px', borderRadius: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
-          >
-            <h3 className="brand-font" style={{ marginBottom: '15px', color: '#fff', fontSize: '1.3rem', textAlign: 'left' }}>Contributions in the Past 6 Months</h3>
-            
-            {/* Mock GitHub Calendar Grid */}
-            <div className="github-calendar-grid" style={{
-              display: 'grid',
-              gridTemplateColumns: `repeat(${columns}, 1fr)`,
-              gap: '4px',
-              width: '100%',
-              overflowX: 'auto',
-              paddingBottom: '10px'
-            }}>
-              {cellLevels.map((level, idx) => (
-                <div 
-                  key={idx} 
-                  className={`calendar-cell level-${level}`} 
-                  style={{
-                    aspectRatio: '1',
-                    borderRadius: '2px',
-                    backgroundColor: level === 3 ? '#00f0ff' : 
-                                    level === 2 ? '#9d00ff' : 
-                                    level === 1 ? 'rgba(0, 240, 255, 0.25)' : 
-                                    'rgba(255, 255, 255, 0.05)',
-                    boxShadow: level === 3 ? '0 0 5px #00f0ff' : 
-                               level === 2 ? '0 0 5px #9d00ff' : 'none'
-                  }}
-                />
-              ))}
-            </div>
-            <div className="calendar-legend" style={{ display: 'flex', justifyContent: 'flex-end', gap: '6px', fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '8px' }}>
-              <span>Less</span>
-              <div style={{ width: '10px', height: '10px', backgroundColor: 'rgba(255, 255, 255, 0.05)', borderRadius: '2px' }}></div>
-              <div style={{ width: '10px', height: '10px', backgroundColor: 'rgba(0, 240, 255, 0.25)', borderRadius: '2px' }}></div>
-              <div style={{ width: '10px', height: '10px', backgroundColor: '#9d00ff', borderRadius: '2px' }}></div>
-              <div style={{ width: '10px', height: '10px', backgroundColor: '#00f0ff', borderRadius: '2px' }}></div>
-              <span>More</span>
-            </div>
-          </motion.div>
+          {/* Left Column: Contribution Grid (Desktop/Laptop only) */}
+          {!isMobile && (
+            <motion.div 
+              className="glass activity-card-main"
+              initial={{ opacity: 0, x: -30 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.6 }}
+              style={{ padding: '30px', borderRadius: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+            >
+              <h3 className="brand-font" style={{ marginBottom: '15px', color: '#fff', fontSize: '1.3rem', textAlign: 'left' }}>Contributions in the Past 6 Months</h3>
+              
+              {/* Mock GitHub Calendar Grid */}
+              <div className="github-calendar-grid" style={{
+                display: 'grid',
+                gridTemplateColumns: `repeat(${columns}, 1fr)`,
+                gap: '4px',
+                width: '100%',
+                overflowX: 'auto',
+                paddingBottom: '10px'
+              }}>
+                {cellLevels.map((level, idx) => (
+                  <div 
+                    key={idx} 
+                    className={`calendar-cell level-${level}`} 
+                    style={{
+                      aspectRatio: '1',
+                      borderRadius: '2px',
+                      backgroundColor: level === 3 ? '#00f0ff' : 
+                                      level === 2 ? '#9d00ff' : 
+                                      level === 1 ? 'rgba(0, 240, 255, 0.25)' : 
+                                      'rgba(255, 255, 255, 0.05)',
+                      boxShadow: level === 3 ? '0 0 5px #00f0ff' : 
+                                 level === 2 ? '0 0 5px #9d00ff' : 'none'
+                    }}
+                  />
+                ))}
+              </div>
+              <div className="calendar-legend" style={{ display: 'flex', justifyContent: 'flex-end', gap: '6px', fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '8px' }}>
+                <span>Less</span>
+                <div style={{ width: '10px', height: '10px', backgroundColor: 'rgba(255, 255, 255, 0.05)', borderRadius: '2px' }}></div>
+                <div style={{ width: '10px', height: '10px', backgroundColor: 'rgba(0, 240, 255, 0.25)', borderRadius: '2px' }}></div>
+                <div style={{ width: '10px', height: '10px', backgroundColor: '#9d00ff', borderRadius: '2px' }}></div>
+                <div style={{ width: '10px', height: '10px', backgroundColor: '#00f0ff', borderRadius: '2px' }}></div>
+                <span>More</span>
+              </div>
+            </motion.div>
+          )}
 
           {/* Right Column: Programming Languages Chart */}
           <motion.div 
