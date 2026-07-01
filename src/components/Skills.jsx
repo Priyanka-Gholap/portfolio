@@ -10,34 +10,34 @@ import {
 } from 'react-icons/si';
 
 const frontendSkills = [
-  { name: 'HTML5', icon: <FaHtml5 color="#E34F26" /> },
-  { name: 'CSS3', icon: <FaCss3Alt color="#1572B6" /> },
-  { name: 'JavaScript', icon: <FaJsSquare color="#F7DF1E" /> },
-  { name: 'React.js', icon: <FaReact color="#61DAFB" /> },
+  { name: 'React.js', icon: <FaReact color="#61DAFB" />, desc: "State-driven client-side views & modular components.", projects: ["Smart Society Hub", "ToggleNest", "CineMatch", "DSA Master", "RCB Verse"] },
+  { name: 'JavaScript', icon: <FaJsSquare color="#F7DF1E" />, desc: "Dynamic client scripting & interactive DOM actions.", projects: ["CineMatch", "RCB Verse", "DSA Master"] },
+  { name: 'HTML5', icon: <FaHtml5 color="#E34F26" />, desc: "Semantic page structures & SEO optimizations.", projects: ["CineMatch", "RCB Verse"] },
+  { name: 'CSS3', icon: <FaCss3Alt color="#1572B6" />, desc: "High-fidelity layouts, grids, & animations.", projects: ["CineMatch", "RCB Verse", "DSA Master"] }
 ];
 
 const backendSkills = [
-  { name: 'Node.js', icon: <FaNodeJs color="#339933" /> },
-  { name: 'Express.js', icon: <SiExpress color="#fff" /> },
-  { name: 'Java', icon: <FaJava color="#007396" /> },
-  { name: 'REST APIs', icon: <FaTools color="#a0aab2" /> },
+  { name: 'Node.js', icon: <FaNodeJs color="#339933" />, desc: "Asynchronous runtime environments.", projects: ["Smart Society Hub", "ToggleNest"] },
+  { name: 'Express.js', icon: <SiExpress color="#fff" />, desc: "RESTful server endpoint routing.", projects: ["Smart Society Hub", "ToggleNest"] },
+  { name: 'Java', icon: <FaJava color="#007396" />, desc: "Multi-threaded object-oriented services.", projects: ["Virtual Banking System"] },
+  { name: 'REST APIs', icon: <FaTools color="#a0aab2" />, desc: "Robust data exchange standard patterns.", projects: ["Smart Society Hub", "ToggleNest", "CineMatch"] }
 ];
 
 const databaseAndTools = [
-  { name: 'MongoDB', icon: <SiMongodb color="#47A248" /> },
-  { name: 'MySQL', icon: <SiMysql color="#4479A1" /> },
-  { name: 'Git', icon: <FaGitAlt color="#F05032" /> },
-  { name: 'GitHub', icon: <FaGithub color="#fff" /> },
-  { name: 'Postman', icon: <SiPostman color="#FF6C37" /> },
+  { name: 'MongoDB', icon: <SiMongodb color="#47A248" />, desc: "Document-oriented schemas & aggregation pipelines.", projects: ["Smart Society Hub", "ToggleNest"] },
+  { name: 'MySQL', icon: <SiMysql color="#4479A1" />, desc: "Relational queries & structured data storage.", projects: ["Academic Projects"] },
+  { name: 'Git', icon: <FaGitAlt color="#F05032" />, desc: "Distributed code branches & version tracks.", projects: ["All Repos"] },
+  { name: 'GitHub', icon: <FaGithub color="#fff" />, desc: "Remote repositories & collaboration control.", projects: ["All Repos"] },
+  { name: 'Postman', icon: <SiPostman color="#FF6C37" />, desc: "API endpoint collections & request traces.", projects: ["Smart Society Hub", "ToggleNest"] }
 ];
 
 const currentlyExploring = [
-  { name: 'TypeScript', icon: <SiTypescript color="#3178C6" /> },
-  { name: 'Docker', icon: <SiDocker color="#2496ED" /> },
-  { name: 'AWS', icon: <FaAws color="#FF9900" /> },
-  { name: 'GraphQL', icon: <SiGraphql color="#E10098" /> },
-  { name: 'Redis', icon: <SiRedis color="#D82C20" /> },
-  { name: 'CI/CD', icon: <SiGithubactions color="#2088FF" /> }
+  { name: 'TypeScript', icon: <SiTypescript color="#3178C6" />, desc: "Typed superset of JavaScript." },
+  { name: 'Docker', icon: <SiDocker color="#2496ED" />, desc: "Containerized deployment configurations." },
+  { name: 'AWS', icon: <FaAws color="#FF9900" />, desc: "Cloud hosting & serverless computing." },
+  { name: 'GraphQL', icon: <SiGraphql color="#E10098" />, desc: "Flexible data query schemas." },
+  { name: 'Redis', icon: <SiRedis color="#D82C20" />, desc: "High-performance cached memory." },
+  { name: 'CI/CD', icon: <SiGithubactions color="#2088FF" />, desc: "Automated pipelines & tests." }
 ];
 
 const Skills = () => {
@@ -53,7 +53,7 @@ const Skills = () => {
   const isMobile = windowWidth < 768;
   const isSmallMobile = windowWidth < 480;
 
-  // Dynamically adjust orbit radii and dimensions based on screen width
+  // Dynamically adjust orbit radii and dimensions based on screen width (Desktop only)
   const r1 = isSmallMobile ? 65 : (isMobile ? 100 : 150);
   const r2 = isSmallMobile ? 115 : (isMobile ? 160 : 240);
   const r3 = isSmallMobile ? 165 : (isMobile ? 220 : 330);
@@ -134,6 +134,127 @@ const Skills = () => {
     );
   };
 
+  const renderMobileSkillCard = (skill, index) => {
+    return (
+      <div 
+        key={index}
+        className="glass mobile-skill-card"
+        style={{
+          padding: '16px 20px',
+          borderRadius: '16px',
+          border: '1px solid rgba(255, 255, 255, 0.06)',
+          background: 'rgba(255, 255, 255, 0.015)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '8px',
+          textAlign: 'left',
+          position: 'relative',
+          transition: 'all 0.3s ease'
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <span style={{ fontSize: '1.8rem', display: 'flex', alignItems: 'center' }}>
+            {skill.icon}
+          </span>
+          <span style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 600, fontFamily: 'Outfit' }}>
+            {skill.name}
+          </span>
+        </div>
+        
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', margin: 0, lineHeight: '1.5' }}>
+          {skill.desc}
+        </p>
+
+        {skill.projects && skill.projects.length > 0 && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '4px', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.7rem', color: 'var(--accent-cyan)', fontWeight: 600, textTransform: 'uppercase', marginRight: '4px' }}>Used in:</span>
+            {skill.projects.map((p, i) => (
+              <span key={i} style={{ 
+                fontSize: '0.7rem', 
+                padding: '2px 8px', 
+                background: 'rgba(0, 240, 255, 0.05)', 
+                border: '1px solid rgba(0, 240, 255, 0.15)',
+                color: 'var(--accent-cyan)',
+                borderRadius: '10px'
+              }}>
+                {p}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Render responsive mobile view
+  if (isMobile) {
+    return (
+      <section id="skills" className="skills">
+        <div className="container" ref={ref}>
+          <motion.h2 
+            className="section-title"
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+          >
+            Technical <span className="text-gradient">Galaxy</span>
+          </motion.h2>
+
+          <div className="mobile-skills-container" style={{ display: 'flex', flexDirection: 'column', gap: '30px', marginTop: '20px' }}>
+            
+            {/* Category: Frontend */}
+            <div>
+              <h3 className="brand-font" style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '15px', textTransform: 'uppercase', letterSpacing: '1px', borderLeft: '3px solid var(--accent-cyan)', paddingLeft: '10px' }}>Frontend</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                {frontendSkills.map((skill, index) => renderMobileSkillCard(skill, index))}
+              </div>
+            </div>
+
+            {/* Category: Backend */}
+            <div>
+              <h3 className="brand-font" style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '15px', textTransform: 'uppercase', letterSpacing: '1px', borderLeft: '3px solid var(--accent-purple)', paddingLeft: '10px' }}>Backend</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                {backendSkills.map((skill, index) => renderMobileSkillCard(skill, index))}
+              </div>
+            </div>
+
+            {/* Category: Database & Tools */}
+            <div>
+              <h3 className="brand-font" style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '15px', textTransform: 'uppercase', letterSpacing: '1px', borderLeft: '3px solid var(--accent-cyan)', paddingLeft: '10px' }}>Databases & Tools</h3>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                {databaseAndTools.map((skill, index) => renderMobileSkillCard(skill, index))}
+              </div>
+            </div>
+
+          </div>
+
+          {/* Currently Exploring Grid for Mobile */}
+          <div style={{ marginTop: '50px', paddingTop: '30px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+            <motion.h3 
+              className="brand-font" 
+              style={{ fontSize: '1.5rem', color: '#fff', marginBottom: '20px', textAlign: 'center' }}
+              initial={{ opacity: 0, y: 15 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+            >
+              Currently <span className="text-gradient">Exploring</span>
+            </motion.h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              {currentlyExploring.map((tech, idx) => (
+                <div key={idx} className="glass" style={{ padding: '12px 15px', borderRadius: '15px', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', gap: '5px', textAlign: 'left' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '1.2rem', display: 'flex' }}>{tech.icon}</span>
+                    <span style={{ color: '#fff', fontSize: '0.9rem', fontWeight: 600 }}>{tech.name}</span>
+                  </div>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.75rem', margin: 0 }}>{tech.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Desktop Orbit View (Unchanged)
   return (
     <section id="skills" className="skills">
       <div className="container" ref={ref}>
@@ -145,7 +266,6 @@ const Skills = () => {
           Technical <span className="text-gradient">Galaxy</span>
         </motion.h2>
 
-        {/* Centered Galaxy Orbits Only */}
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}>
           <motion.div 
             className="solar-system-container"
@@ -165,7 +285,6 @@ const Skills = () => {
               border: '1px solid rgba(255,255,255,0.02)'
             }}
           >
-            {/* The "Sun" / Core */}
             <div 
               className="sun glass text-gradient brand-font"
               style={{
@@ -184,14 +303,12 @@ const Skills = () => {
               ME
             </div>
 
-            {/* Render Orbits */}
             {renderOrbit(frontendSkills, r1, 24, false)}
             {renderOrbit(backendSkills, r2, 36, true)}
             {renderOrbit(databaseAndTools, r3, 48, false)}
           </motion.div>
         </div>
 
-        {/* Simplified Currently Exploring capsule tags */}
         <div style={{ marginTop: '80px', paddingTop: '40px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
           <motion.h3 
             className="section-title" 

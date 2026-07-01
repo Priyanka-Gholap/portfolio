@@ -83,6 +83,19 @@ const Contact = () => {
                   <a href="https://maps.google.com/?q=Dombivli,+Maharashtra,+India" target="_blank" rel="noreferrer" className="contact-link" style={{ fontSize: '0.95rem' }}>Dombivli, Maharashtra, India</a>
                 </div>
               </div>
+
+              {/* Resume download action button */}
+              <div className="contact-resume-btn-wrapper" style={{ marginTop: '35px' }}>
+                <a 
+                  href="/resume.pdf" 
+                  target="_blank" 
+                  rel="noreferrer" 
+                  className="btn btn-secondary contact-resume-btn" 
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', border: '1px solid var(--accent-purple)' }}
+                >
+                  <FaFileAlt /> Download Resume / CV
+                </a>
+              </div>
             </div>
           </div>
 

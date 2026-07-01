@@ -61,11 +61,13 @@ const Navbar = () => {
             transition={{ duration: 0.3 }}
           >
             <nav className="mobile-nav-links">
+              <a href="#home" onClick={closeMenu}>Home</a>
               <a href="#about" onClick={closeMenu}>About</a>
               <a href="#education" onClick={closeMenu}>Education</a>
               <a href="#skills" onClick={closeMenu}>Skills</a>
               <a href="#projects" onClick={closeMenu}>Projects</a>
               <a href="#contact" onClick={closeMenu}>Contact</a>
+              <a href="/resume.pdf" target="_blank" rel="noreferrer" onClick={closeMenu}>Resume</a>
             </nav>
           </motion.div>
         )}

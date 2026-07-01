@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { FaGithub, FaGlobe, FaTimes, FaDatabase, FaLock, FaMobileAlt, FaCloudUploadAlt, FaBrain, FaExchangeAlt, FaNetworkWired } from 'react-icons/fa';
@@ -299,13 +299,13 @@ const Projects = () => {
   const [selectedCaseStudy, setSelectedCaseStudy] = useState(null);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const isMobile = windowWidth < 992; // Tablet/Mobile threshold for layout
+  const isMobile = windowWidth < 768; // Mobile threshold
 
   const filters = ['All', 'React', 'MERN', 'AI/ML', 'Java', 'Frontend', 'Backend'];
 
@@ -341,10 +341,313 @@ const Projects = () => {
     );
   };
 
+  const renderMobileProjectCard = (proj) => {
+    return (
+      <div 
+        key={proj.title}
+        className="glass mobile-project-card"
+        style={{
+          borderRadius: '20px',
+          border: '1px solid rgba(255, 255, 255, 0.06)',
+          background: 'rgba(255, 255, 255, 0.015)',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          textAlign: 'left',
+          marginBottom: '24px',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
+          transition: 'all 0.3s ease'
+        }}
+      >
+        {/* Visual Banner Placeholder */}
+        <div style={{
+          height: '140px',
+          background: 'var(--gradient-neon)',
+          opacity: 0.85,
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)',
+            backgroundSize: '20px 20px',
+            zIndex: 1
+          }} />
+          <div style={{ fontSize: '3.5rem', color: '#fff', zIndex: 2, filter: 'drop-shadow(0 0 15px rgba(0,240,255,0.6))' }}>
+            {proj.title === 'Smart Society Hub' && <FaDatabase />}
+            {proj.title === 'ToggleNest' && <FaLock />}
+            {proj.title === 'CineMatch' && <FaGlobe />}
+            {proj.title === 'AI Resume Analyzer' && <FaBrain />}
+            {proj.title === 'Virtual Banking System' && <FaExchangeAlt />}
+            {proj.title === 'DSA Learning Platform' && <FaNetworkWired />}
+            {proj.title === 'RCB Verse' && <FaMobileAlt />}
+          </div>
+        </div>
+
+        {/* Card Content */}
+        <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          <h3 className="brand-font" style={{ fontSize: '1.4rem', color: '#fff', margin: 0, fontWeight: 600 }}>
+            {proj.title}
+          </h3>
+          
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', margin: 0, lineHeight: '1.5' }}>
+            {proj.description}
+          </p>
+
+          {/* Tech Badges */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+            {proj.tech.map((t, i) => (
+              <span key={i} style={{ 
+                fontSize: '0.75rem', 
+                padding: '4px 10px', 
+                background: 'rgba(157, 0, 255, 0.08)', 
+                color: 'var(--accent-purple)', 
+                border: '1px solid rgba(157, 0, 255, 0.2)',
+                borderRadius: '6px',
+                fontWeight: 600
+              }}>
+                {t}
+              </span>
+            ))}
+          </div>
+
+          {/* Action Buttons */}
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '5px' }}>
+            <button 
+              onClick={() => setSelectedCaseStudy(proj)}
+              className="btn btn-secondary" 
+              style={{ flex: 1, padding: '10px', fontSize: '0.85rem', border: '1px solid var(--accent-purple)', background: 'rgba(157, 0, 255, 0.02)' }}
+            >
+              Case Study
+            </button>
+            
+            {proj.github !== '#' && proj.github !== '' && (
+              <a href={proj.github} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ padding: '10px 12px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.85rem', border: '1px solid var(--text-muted)' }}>
+                <FaGithub /> Repo
+              </a>
+            )}
+            
+            {proj.link !== '#' && proj.link !== '' && (
+              <a href={proj.link} target="_blank" rel="noreferrer" className="btn btn-primary" style={{ padding: '10px 15px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.85rem' }}>
+                <FaGlobe /> Preview
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Render responsive mobile view
+  if (isMobile) {
+    return (
+      <section id="projects" className="projects">
+        <div className="container" ref={ref}>
+          {/* Title */}
+          <motion.h2 
+            className="section-title"
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+          >
+            Selected <span className="text-gradient">Projects</span>
+          </motion.h2>
+
+          {/* Filter Buttons */}
+          <div className="projects-filter-bar" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginBottom: '30px' }}>
+            {filters.map((f, i) => (
+              <button
+                key={i}
+                onClick={() => handleFilterClick(f)}
+                className={`filter-btn ${activeFilter === f ? 'active' : ''}`}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: '30px',
+                  border: activeFilter === f ? '1px solid var(--accent-cyan)' : '1px solid rgba(255,255,255,0.08)',
+                  background: activeFilter === f ? 'rgba(0, 240, 255, 0.1)' : 'rgba(255,255,255,0.02)',
+                  color: activeFilter === f ? '#fff' : 'var(--text-muted)',
+                  fontWeight: 600,
+                  fontSize: '0.8rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+
+          {/* Mobile list of projects */}
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {filteredProjects.map((proj) => renderMobileProjectCard(proj))}
+          </div>
+        </div>
+
+        {/* Case Study Modal (Shared) */}
+        <AnimatePresence>
+          {selectedCaseStudy && (
+            <motion.div 
+              className="case-study-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              style={{
+                position: 'fixed',
+                top: 0, left: 0, right: 0, bottom: 0,
+                background: 'rgba(5, 5, 8, 0.95)',
+                backdropFilter: 'blur(15px)',
+                WebkitBackdropFilter: 'blur(15px)',
+                zIndex: 9999,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '24px'
+              }}
+            >
+              <motion.div 
+                className="glass case-study-modal"
+                initial={{ y: 50, scale: 0.95 }}
+                animate={{ y: 0, scale: 1 }}
+                exit={{ y: 50, scale: 0.95 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 180 }}
+                style={{
+                  width: '100%',
+                  maxWidth: '900px',
+                  maxHeight: '90vh',
+                  overflowY: 'auto',
+                  padding: isMobile ? '24px' : '40px',
+                  borderRadius: '20px',
+                  border: '1px solid var(--accent-purple)',
+                  boxShadow: '0 10px 40px rgba(157, 0, 255, 0.2)',
+                  position: 'relative',
+                  textAlign: 'left'
+                }}
+              >
+                {/* Close Button */}
+                <button 
+                  onClick={() => setSelectedCaseStudy(null)}
+                  style={{
+                    position: 'absolute',
+                    top: '20px', right: '20px',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    color: '#fff',
+                    borderRadius: '50%',
+                    width: '40px', height: '40px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: 'pointer',
+                    zIndex: 10,
+                    transition: 'all 0.3s'
+                  }}
+                  className="close-modal-btn"
+                >
+                  <FaTimes size={18} />
+                </button>
+
+                {/* Case Study Content */}
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <span className="text-gradient" style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+                    Project Case Study
+                  </span>
+                  <h2 className="brand-font" style={{ fontSize: isMobile ? '1.8rem' : '3rem', color: '#fff', marginTop: '5px', marginBottom: '20px' }}>
+                    {selectedCaseStudy.title}
+                  </h2>
+
+                  <div className="case-study-content-grid" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    
+                    <div>
+                      <h3 className="brand-font text-gradient" style={{ fontSize: '1.2rem', marginBottom: '8px' }}>Overview</h3>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>{selectedCaseStudy.caseStudy.overview}</p>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                      <div>
+                        <h3 className="brand-font text-gradient" style={{ fontSize: '1.2rem', marginBottom: '8px' }}>Architecture Flow</h3>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>{selectedCaseStudy.caseStudy.architecture}</p>
+                      </div>
+                      <div>
+                        <h3 className="brand-font text-gradient" style={{ fontSize: '1.2rem', marginBottom: '8px' }}>Project Role</h3>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>Sole Developer - Responsible for client-side routing, state architectures, backend controller logic, and database schemas integration.</p>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                      <div>
+                        <h3 className="brand-font text-gradient" style={{ fontSize: '1.2rem', marginBottom: '8px' }}>Folder Structure</h3>
+                        <pre style={{ 
+                          background: 'rgba(0,0,0,0.3)', 
+                          padding: '12px', 
+                          borderRadius: '10px', 
+                          color: 'var(--accent-cyan)', 
+                          fontSize: '0.8rem',
+                          fontFamily: 'monospace',
+                          overflowX: 'auto',
+                          border: '1px solid rgba(255,255,255,0.05)'
+                        }}>{selectedCaseStudy.caseStudy.folderStructure}</pre>
+                      </div>
+                      <div>
+                        <h3 className="brand-font text-gradient" style={{ fontSize: '1.2rem', marginBottom: '8px' }}>Database Schema Design</h3>
+                        <pre style={{ 
+                          background: 'rgba(0,0,0,0.3)', 
+                          padding: '12px', 
+                          borderRadius: '10px', 
+                          color: 'var(--accent-purple)', 
+                          fontSize: '0.8rem',
+                          fontFamily: 'monospace',
+                          overflowX: 'auto',
+                          border: '1px solid rgba(255,255,255,0.05)'
+                        }}>{selectedCaseStudy.caseStudy.databaseDesign}</pre>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="brand-font text-gradient" style={{ fontSize: '1.2rem', marginBottom: '8px' }}>Core API Workflow</h3>
+                      <pre style={{ 
+                        background: 'rgba(0,0,0,0.3)', 
+                        padding: '12px', 
+                        borderRadius: '10px', 
+                        color: 'var(--text-main)', 
+                        fontSize: '0.8rem',
+                        fontFamily: 'monospace',
+                        overflowX: 'auto',
+                        border: '1px solid rgba(255,255,255,0.05)',
+                        whiteSpace: 'pre-wrap'
+                      }}>{selectedCaseStudy.caseStudy.apiFlow}</pre>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                      <div>
+                        <h3 className="brand-font text-gradient" style={{ fontSize: '1.2rem', marginBottom: '8px' }}>Key Technical Challenge</h3>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>{selectedCaseStudy.caseStudy.challenges}</p>
+                      </div>
+                      <div>
+                        <h3 className="brand-font text-gradient" style={{ fontSize: '1.2rem', marginBottom: '8px' }}>Lessons Learned</h3>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>{selectedCaseStudy.caseStudy.lessons}</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="brand-font text-gradient" style={{ fontSize: '1.2rem', marginBottom: '8px' }}>Future Improvements</h3>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: '1.5' }}>{selectedCaseStudy.caseStudy.future}</p>
+                    </div>
+
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </section>
+    );
+  }
+
+  // Desktop View (Unchanged)
   return (
     <section id="projects" className="projects">
       <div className="container" ref={ref}>
-        {/* Title */}
         <motion.h2 
           className="section-title"
           initial={{ opacity: 0, y: 20 }}
@@ -353,7 +656,6 @@ const Projects = () => {
           Selected <span className="text-gradient">Projects</span>
         </motion.h2>
 
-        {/* Filter Buttons */}
         <div className="projects-filter-bar" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center', marginBottom: '40px' }}>
           {filters.map((f, i) => (
             <motion.button
@@ -379,15 +681,13 @@ const Projects = () => {
           ))}
         </div>
 
-        {/* Master Detail Layout */}
         <div className="projects-grid-layout" style={{ 
           display: 'grid', 
-          gridTemplateColumns: isMobile ? '1fr' : '1.35fr 1.65fr', 
+          gridTemplateColumns: '1.35fr 1.65fr', 
           gap: '40px', 
           alignItems: 'stretch' 
         }}>
           
-          {/* Left Column: Project List */}
           <div style={{ 
             display: 'flex', 
             flexDirection: 'column', 
@@ -446,7 +746,6 @@ const Projects = () => {
             </AnimatePresence>
           </div>
 
-          {/* Right Column: Dynamic Modern Display */}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <AnimatePresence mode="wait">
               <motion.div
@@ -457,7 +756,6 @@ const Projects = () => {
                 transition={{ duration: 0.3 }}
                 style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}
               >
-                {/* Sleek Modern Glass Display Panel */}
                 <div className="glass project-detail-card" style={{
                   flexGrow: 1,
                   padding: '40px',
@@ -485,7 +783,6 @@ const Projects = () => {
                       {activeProject.description}
                     </p>
 
-                    {/* Project Metrics Display */}
                     <h4 style={{ color: '#fff', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.8rem', fontWeight: 600 }}>Technical Scope</h4>
                     <div className="project-metrics-row" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '25px' }}>
                       {renderMetricBadge(<FaMobileAlt />, "Responsive", activeProject.metrics.responsive)}
@@ -525,14 +822,12 @@ const Projects = () => {
                       Deep Case Study
                     </button>
                     
-                    {/* Conditionally render Repo button */}
                     {activeProject.github !== '#' && activeProject.github !== '' && (
                       <a href={activeProject.github} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ border: '1px solid var(--text-muted)', display: 'inline-flex', padding: '10px 15px' }}>
                         <FaGithub /> Repo
                       </a>
                     )}
                     
-                    {/* Conditionally render Preview button */}
                     {activeProject.link !== '#' && activeProject.link !== '' && (
                       <a href={activeProject.link} target="_blank" rel="noreferrer" className="btn btn-primary" style={{ display: 'inline-flex', padding: '10px 20px' }}>
                         <FaGlobe /> Preview
@@ -547,7 +842,6 @@ const Projects = () => {
         </div>
       </div>
 
-      {/* Fullscreen Case Study Overlay Modal */}
       <AnimatePresence>
         {selectedCaseStudy && (
           <motion.div 
@@ -587,7 +881,6 @@ const Projects = () => {
                 textAlign: 'left'
               }}
             >
-              {/* Close Button */}
               <button 
                 onClick={() => setSelectedCaseStudy(null)}
                 style={{
@@ -598,7 +891,7 @@ const Projects = () => {
                   color: '#fff',
                   borderRadius: '50%',
                   width: '40px', height: '40px',
-                  display: 'flex', alignItems: 'center', justifycontent: 'center',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
                   cursor: 'pointer',
                   zIndex: 10,
                   transition: 'all 0.3s'
@@ -608,7 +901,6 @@ const Projects = () => {
                 <FaTimes size={18} />
               </button>
 
-              {/* Case Study Content */}
               <div style={{ position: 'relative', zIndex: 1 }}>
                 <span className="text-gradient" style={{ fontSize: '0.9rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px' }}>
                   Project Case Study
