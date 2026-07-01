@@ -37,23 +37,23 @@ const Hero = () => {
 
           {/* Core Recruiter Statistics */}
           <div className="hero-stats-badge-grid">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div className="hero-stat-item">
               <span className="text-gradient" style={{ fontWeight: 800 }}>✦</span>
               <span style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>7+ Real Projects</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div className="hero-stat-item">
               <span className="text-gradient" style={{ fontWeight: 800 }}>✦</span>
               <span style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>MERN Stack Developer</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div className="hero-stat-item">
               <span className="text-gradient" style={{ fontWeight: 800 }}>✦</span>
               <span style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>AI/ML Projects</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div className="hero-stat-item">
               <span className="text-gradient" style={{ fontWeight: 800 }}>✦</span>
               <span style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>Computer Engineering Student</span>
             </div>
-            <div className="hero-stats-footer-span" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div className="hero-stats-footer-span hero-stat-item">
               <span className="text-gradient" style={{ fontWeight: 800 }}>★</span>
               <span style={{ color: '#fff', fontSize: '0.95rem', fontWeight: 600 }}>React • Node.js • MongoDB</span>
             </div>

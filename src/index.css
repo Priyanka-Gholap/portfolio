@@ -1160,6 +1160,12 @@ footer {
   width: 100%;
 }
 
+.hero-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .hero-stats-footer-span {
   grid-column: 1 / -1;
 }
@@ -1204,6 +1210,9 @@ footer {
   .hero-left-col {
     text-align: center;
     align-items: center;
+  }
+  .hero-stat-item {
+    justify-content: center;
   }
   .hero-btns {
     justify-content: center;
