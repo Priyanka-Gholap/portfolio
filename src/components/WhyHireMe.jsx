@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import Tilt from 'react-parallax-tilt';
 import { FaBolt, FaPuzzlePiece, FaLayerGroup, FaFileCode, FaMobileAlt, FaServer, FaDatabase, FaGraduationCap } from 'react-icons/fa';
 
 const whyHireCards = [
@@ -63,24 +64,58 @@ const WhyHireMe = () => {
 
         <div className="why-hire-grid">
           {whyHireCards.map((card, idx) => (
-            <motion.div
+            <Tilt
               key={idx}
-              className="glass why-hire-card"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={inView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ delay: idx * 0.08, duration: 0.5 }}
-              whileHover={{ 
-                y: -5,
-                borderColor: 'var(--accent-cyan)',
-                boxShadow: '0 8px 25px rgba(0, 240, 255, 0.12)'
-              }}
+              tiltMaxAngleX={12}
+              tiltMaxAngleY={12}
+              scale={1.03}
+              transitionSpeed={800}
+              style={{ height: '100%' }}
             >
-              <div className="why-hire-icon text-gradient">
-                {card.icon}
-              </div>
-              <h3 className="brand-font">{card.title}</h3>
-              <p>{card.description}</p>
-            </motion.div>
+              <motion.div
+                className="glass why-hire-card"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ delay: idx * 0.04, duration: 0.5, ease: 'easeOut' }}
+                style={{ height: '100%', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}
+                whileHover="hover"
+              >
+                {/* Gradient Border Mask on Hover */}
+                <motion.div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    borderRadius: '16px',
+                    padding: '1.5px',
+                    background: 'linear-gradient(135deg, var(--accent-cyan), var(--accent-purple))',
+                    WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                    WebkitMaskComposite: 'xor',
+                    maskComposite: 'exclude',
+                    pointerEvents: 'none',
+                    opacity: 0,
+                    transition: 'opacity 0.4s ease'
+                  }}
+                  variants={{
+                    hover: { opacity: 1 }
+                  }}
+                />
+
+                {/* Glowing and rotating icon */}
+                <motion.div
+                  className="why-hire-icon text-gradient"
+                  style={{ display: 'inline-flex', position: 'relative', zIndex: 2 }}
+                  variants={{
+                    hover: { rotate: 15, scale: 1.1 }
+                  }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 10 }}
+                >
+                  {card.icon}
+                </motion.div>
+                <h3 className="brand-font" style={{ position: 'relative', zIndex: 2 }}>{card.title}</h3>
+                <p style={{ position: 'relative', zIndex: 2 }}>{card.description}</p>
+              </motion.div>
+            </Tilt>
           ))}
         </div>
       </div>

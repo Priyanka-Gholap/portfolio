@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import Tilt from 'react-parallax-tilt';
 import { FaGithub, FaGlobe, FaTimes, FaDatabase, FaLock, FaMobileAlt, FaCloudUploadAlt, FaBrain, FaExchangeAlt, FaNetworkWired } from 'react-icons/fa';
 
 const featuredProjects = [
@@ -254,41 +255,50 @@ const SpotlightCard = ({ children, isActive, onClick }) => {
   };
 
   return (
-    <div
-      ref={divRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setOpacity(1)}
-      onMouseLeave={() => setOpacity(0)}
-      onClick={onClick}
-      className="glass"
-      style={{
-        position: 'relative',
-        overflow: 'hidden',
-        padding: '36px 40px',
-        cursor: 'pointer',
-        border: isActive ? '1px solid var(--accent-cyan)' : '1px solid rgba(255,255,255,0.06)',
-        background: isActive ? 'rgba(0, 240, 255, 0.04)' : 'rgba(255, 255, 255, 0.015)',
-        transition: 'border 0.3s ease, background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease',
-        boxShadow: isActive ? '0 10px 25px rgba(0, 240, 255, 0.15)' : 'none',
-        borderRadius: '20px',
-        textAlign: 'left'
-      }}
+    <Tilt
+      tiltMaxAngleX={8}
+      tiltMaxAngleY={8}
+      scale={1.01}
+      transitionSpeed={800}
+      style={{ height: '100%' }}
     >
       <div
+        ref={divRef}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setOpacity(1)}
+        onMouseLeave={() => setOpacity(0)}
+        onClick={onClick}
+        className="glass"
         style={{
-          pointerEvents: 'none',
-          position: 'absolute',
-          inset: 0,
-          opacity,
-          transition: 'opacity 0.3s ease',
-          background: `radial-gradient(350px circle at ${position.x}px ${position.y}px, rgba(157, 0, 255, 0.2), transparent 45%)`,
-          zIndex: 0
+          position: 'relative',
+          overflow: 'hidden',
+          padding: '36px 40px',
+          cursor: 'pointer',
+          border: isActive ? '1px solid var(--accent-cyan)' : '1px solid rgba(255,255,255,0.06)',
+          background: isActive ? 'rgba(0, 240, 255, 0.04)' : 'rgba(255, 255, 255, 0.015)',
+          transition: 'border 0.3s ease, background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease',
+          boxShadow: isActive ? '0 10px 25px rgba(0, 240, 255, 0.15)' : 'none',
+          borderRadius: '20px',
+          textAlign: 'left',
+          height: '100%'
         }}
-      />
-      <div style={{ position: 'relative', zIndex: 1 }}>
-        {children}
+      >
+        <div
+          style={{
+            pointerEvents: 'none',
+            position: 'absolute',
+            inset: 0,
+            opacity,
+            transition: 'opacity 0.3s ease',
+            background: `radial-gradient(350px circle at ${position.x}px ${position.y}px, rgba(157, 0, 255, 0.2), transparent 45%)`,
+            zIndex: 0
+          }}
+        />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          {children}
+        </div>
       </div>
-    </div>
+    </Tilt>
   );
 };
 
@@ -321,23 +331,28 @@ const Projects = () => {
     }
   };
 
-  const renderMetricBadge = (icon, text, active) => {
+  const renderMetricBadge = (icon, text, active, delayIdx = 0) => {
     if (!active) return null;
     return (
-      <div style={{ 
-        display: 'inline-flex', 
-        alignItems: 'center', 
-        gap: '6px', 
-        padding: '6px 12px', 
-        background: 'rgba(255, 255, 255, 0.03)', 
-        border: '1px solid rgba(255, 255, 255, 0.06)', 
-        borderRadius: '20px', 
-        fontSize: '0.8rem',
-        color: '#fff' 
-      }}>
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ delay: delayIdx * 0.05 + 0.15, type: 'spring', stiffness: 150 }}
+        style={{ 
+          display: 'inline-flex', 
+          alignItems: 'center', 
+          gap: '6px', 
+          padding: '6px 12px', 
+          background: 'rgba(255, 255, 255, 0.03)', 
+          border: '1px solid rgba(255, 255, 255, 0.06)', 
+          borderRadius: '20px', 
+          fontSize: '0.8rem',
+          color: '#fff' 
+        }}
+      >
         <span className="text-gradient" style={{ display: 'flex', alignItems: 'center' }}>{icon}</span>
         <span>{text}</span>
-      </div>
+      </motion.div>
     );
   };
 
@@ -779,61 +794,109 @@ const Projects = () => {
                     }}>
                       {activeProject.title}
                     </h2>
-                    <p style={{ fontSize: '1rem', color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '25px' }}>
-                      {activeProject.description}
-                    </p>
+                    
+                    {/* Sentence-by-sentence details reveal */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '25px' }}>
+                      {activeProject.description.split(". ").map((sentence, sIdx) => {
+                        if (!sentence) return null;
+                        const formattedText = sentence.endsWith('.') ? sentence : `${sentence}.`;
+                        return (
+                          <motion.p
+                            key={sIdx}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: sIdx * 0.1 + 0.1, duration: 0.5, ease: 'easeOut' }}
+                            style={{ fontSize: '1rem', color: 'var(--text-muted)', lineHeight: '1.6', margin: 0 }}
+                          >
+                            {formattedText}
+                          </motion.p>
+                        );
+                      })}
+                    </div>
 
                     <h4 style={{ color: '#fff', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.8rem', fontWeight: 600 }}>Technical Scope</h4>
                     <div className="project-metrics-row" style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '25px' }}>
-                      {renderMetricBadge(<FaMobileAlt />, "Responsive", activeProject.metrics.responsive)}
-                      {renderMetricBadge(<FaExchangeAlt />, "REST APIs", activeProject.metrics.restApis)}
-                      {renderMetricBadge(<FaLock />, "Auth", activeProject.metrics.auth)}
-                      {renderMetricBadge(<FaDatabase />, "Database", activeProject.metrics.database)}
-                      {renderMetricBadge(<FaBrain />, "AI Integration", activeProject.metrics.ai)}
-                      {renderMetricBadge(<FaNetworkWired />, "RBAC", activeProject.metrics.roleBased)}
-                      {renderMetricBadge(<FaGlobe />, "Real-time", activeProject.metrics.realTime)}
-                      {renderMetricBadge(<FaCloudUploadAlt />, "Deployed", activeProject.metrics.deployment)}
+                      {renderMetricBadge(<FaMobileAlt />, "Responsive", activeProject.metrics.responsive, 0)}
+                      {renderMetricBadge(<FaExchangeAlt />, "REST APIs", activeProject.metrics.restApis, 1)}
+                      {renderMetricBadge(<FaLock />, "Auth", activeProject.metrics.auth, 2)}
+                      {renderMetricBadge(<FaDatabase />, "Database", activeProject.metrics.database, 3)}
+                      {renderMetricBadge(<FaBrain />, "AI Integration", activeProject.metrics.ai, 4)}
+                      {renderMetricBadge(<FaNetworkWired />, "RBAC", activeProject.metrics.roleBased, 5)}
+                      {renderMetricBadge(<FaGlobe />, "Real-time", activeProject.metrics.realTime, 6)}
+                      {renderMetricBadge(<FaCloudUploadAlt />, "Deployed", activeProject.metrics.deployment, 7)}
                     </div>
                     
                     <h4 style={{ color: '#fff', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '0.8rem', fontWeight: 600 }}>Core Technologies</h4>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                       {activeProject.tech.map((t, i) => (
-                        <span key={i} style={{ 
-                          padding: '6px 12px', 
-                          background: 'rgba(157, 0, 255, 0.08)', 
-                          color: 'var(--accent-purple)', 
-                          borderRadius: '6px', 
-                          border: '1px solid rgba(157, 0, 255, 0.25)', 
-                          fontWeight: '600',
-                          fontSize: '0.85rem'
-                        }}>
+                        <motion.span 
+                          key={i} 
+                          initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          transition={{ delay: i * 0.05 + 0.25, type: 'spring', stiffness: 150 }}
+                          whileHover={{ scale: 1.1, y: -2 }}
+                          style={{ 
+                            padding: '6px 12px', 
+                            background: 'rgba(157, 0, 255, 0.08)', 
+                            color: 'var(--accent-purple)', 
+                            borderRadius: '6px', 
+                            border: '1px solid rgba(157, 0, 255, 0.25)', 
+                            fontWeight: '600',
+                            fontSize: '0.85rem',
+                            cursor: 'default',
+                            display: 'inline-block'
+                          }}
+                        >
                           {t}
-                        </span>
+                        </motion.span>
                       ))}
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '15px', position: 'relative', zIndex: 1, flexWrap: 'wrap', marginTop: '30px' }}>
-                    <button 
+                  <motion.div 
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.45, duration: 0.5 }}
+                    style={{ display: 'flex', gap: '15px', position: 'relative', zIndex: 1, flexWrap: 'wrap', marginTop: '30px' }}
+                  >
+                    <motion.button 
                       onClick={() => setSelectedCaseStudy(activeProject)}
                       className="btn btn-secondary" 
                       style={{ flex: 1, border: '1px solid var(--accent-purple)', background: 'rgba(157, 0, 255, 0.02)' }}
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
                     >
                       Deep Case Study
-                    </button>
+                    </motion.button>
                     
                     {activeProject.github !== '#' && activeProject.github !== '' && (
-                      <a href={activeProject.github} target="_blank" rel="noreferrer" className="btn btn-secondary" style={{ border: '1px solid var(--text-muted)', display: 'inline-flex', padding: '10px 15px' }}>
+                      <motion.a 
+                        href={activeProject.github} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className="btn btn-secondary" 
+                        style={{ border: '1px solid var(--text-muted)', display: 'inline-flex', padding: '10px 15px' }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
                         <FaGithub /> Repo
-                      </a>
+                      </motion.a>
                     )}
                     
                     {activeProject.link !== '#' && activeProject.link !== '' && (
-                      <a href={activeProject.link} target="_blank" rel="noreferrer" className="btn btn-primary" style={{ display: 'inline-flex', padding: '10px 20px' }}>
+                      <motion.a 
+                        href={activeProject.link} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className="btn btn-primary" 
+                        style={{ display: 'inline-flex', padding: '10px 20px' }}
+                        whileHover={{ scale: 1.05, boxShadow: '0 0 15px rgba(0,240,255,0.4)' }}
+                        whileTap={{ scale: 0.95 }}
+                      >
                         <FaGlobe /> Preview
-                      </a>
+                      </motion.a>
                     )}
-                  </div>
+                  </motion.div>
                 </div>
               </motion.div>
             </AnimatePresence>

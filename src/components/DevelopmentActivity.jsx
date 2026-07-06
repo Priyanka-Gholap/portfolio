@@ -60,35 +60,62 @@ const DevelopmentActivity = () => {
       <div className="container" ref={ref}>
         <motion.h2 
           className="section-title"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           Development <span className="text-gradient">Activity</span>
         </motion.h2>
 
         {/* Counter Stats */}
         <div className="activity-stats-grid">
-          <div className="glass activity-stat-card">
-            <FaGithub size={28} className="text-gradient" />
-            <h3 className="brand-font"><Counter value="7" suffix="+" /></h3>
-            <p>Projects Built</p>
-          </div>
-          <div className="glass activity-stat-card">
-            <FaCode size={28} className="text-gradient" />
-            <h3 className="brand-font"><Counter value="15" suffix="+" /></h3>
-            <p>Technologies Used</p>
-          </div>
-          <div className="glass activity-stat-card">
-            <FaCodeBranch size={28} className="text-gradient" />
-            <h3 className="brand-font"><Counter value="30" suffix="+" /></h3>
-            <p>Repositories</p>
-          </div>
-          <div className="glass activity-stat-card">
-            <FaBook size={28} className="text-gradient" />
-            <h3 className="brand-font"><Counter value="840" suffix="+" /></h3>
-            <p>GitHub Commits</p>
-          </div>
+          {[
+            { icon: <FaGithub size={28} className="text-gradient" />, val: "7", suff: "+", desc: "Projects Built" },
+            { icon: <FaCode size={28} className="text-gradient" />, val: "15", suff: "+", desc: "Technologies Used" },
+            { icon: <FaCodeBranch size={28} className="text-gradient" />, val: "30", suff: "+", desc: "Repositories" },
+            { icon: <FaBook size={28} className="text-gradient" />, val: "840", suff: "+", desc: "GitHub Commits" }
+          ].map((stat, sIdx) => (
+            <motion.div 
+              key={sIdx}
+              className="glass activity-stat-card"
+              initial={{ opacity: 0, y: 30 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: sIdx * 0.08, duration: 0.5, ease: 'easeOut' }}
+              style={{ position: 'relative', overflow: 'hidden', cursor: 'pointer' }}
+              whileHover="hover"
+            >
+              {/* Gradient Border Mask on Hover */}
+              <motion.div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  borderRadius: '16px',
+                  padding: '1.5px',
+                  background: 'linear-gradient(135deg, var(--accent-cyan), var(--accent-purple))',
+                  WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                  WebkitMaskComposite: 'xor',
+                  maskComposite: 'exclude',
+                  pointerEvents: 'none',
+                  opacity: 0,
+                  transition: 'opacity 0.4s ease'
+                }}
+                variants={{
+                  hover: { opacity: 1 }
+                }}
+              />
+              <motion.div
+                variants={{
+                  hover: { rotate: 12, scale: 1.15 }
+                }}
+                transition={{ type: 'spring', stiffness: 300, damping: 10 }}
+                style={{ display: 'inline-flex', marginBottom: '8px' }}
+              >
+                {stat.icon}
+              </motion.div>
+              <h3 className="brand-font"><Counter value={stat.val} suffix={stat.suff} /></h3>
+              <p style={{ margin: 0, color: 'var(--text-muted)' }}>{stat.desc}</p>
+            </motion.div>
+          ))}
         </div>
 
         <div className="activity-details-layout" style={{ 
@@ -104,7 +131,7 @@ const DevelopmentActivity = () => {
               className="glass activity-card-main"
               initial={{ opacity: 0, x: -30 }}
               animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
               style={{ padding: '30px', borderRadius: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
             >
               <h3 className="brand-font" style={{ marginBottom: '15px', color: '#fff', fontSize: '1.3rem', textAlign: 'left' }}>Contributions in the Past 6 Months</h3>
@@ -119,9 +146,12 @@ const DevelopmentActivity = () => {
                 paddingBottom: '10px'
               }}>
                 {cellLevels.map((level, idx) => (
-                  <div 
+                  <motion.div 
                     key={idx} 
                     className={`calendar-cell level-${level}`} 
+                    initial={{ scale: 0 }}
+                    animate={inView ? { scale: 1 } : {}}
+                    transition={{ delay: (idx % columns) * 0.015 + (idx % rows) * 0.015, type: 'spring', stiffness: 200, damping: 15 }}
                     style={{
                       aspectRatio: '1',
                       borderRadius: '2px',

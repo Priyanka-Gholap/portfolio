@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Tilt from 'react-parallax-tilt';
 import { 
@@ -43,6 +43,13 @@ const currentlyExploring = [
 const Skills = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.05 });
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+  const [selectedSkill, setSelectedSkill] = useState(null);
+
+  // Mouse Parallax coordinates for Technical Galaxy
+  const parallaxX = useMotionValue(0);
+  const parallaxY = useMotionValue(0);
+  const smoothPX = useSpring(parallaxX, { damping: 30, stiffness: 100 });
+  const smoothPY = useSpring(parallaxY, { damping: 30, stiffness: 100 });
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -50,10 +57,22 @@ const Skills = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      // Shift galaxy slightly based on mouse position
+      const x = (e.clientX / window.innerWidth - 0.5) * 15;
+      const y = (e.clientY / window.innerHeight - 0.5) * 15;
+      parallaxX.set(x);
+      parallaxY.set(y);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [parallaxX, parallaxY]);
+
   const isMobile = windowWidth < 768;
   const isSmallMobile = windowWidth < 480;
 
-  // Dynamically adjust orbit radii and dimensions based on screen width (Desktop only)
+  // Radii adjustments
   const r1 = isSmallMobile ? 65 : (isMobile ? 100 : 150);
   const r2 = isSmallMobile ? 115 : (isMobile ? 160 : 240);
   const r3 = isSmallMobile ? 165 : (isMobile ? 220 : 330);
@@ -71,6 +90,8 @@ const Skills = () => {
           top: `calc(50% - ${radius}px)`,
           left: `calc(50% - ${radius}px)`,
           '--duration': `${duration}s`,
+          border: '1px dashed rgba(0, 240, 255, 0.18)',
+          boxShadow: '0 0 15px rgba(0, 240, 255, 0.03)'
         }}
       >
         {skills.map((skill, index) => {
@@ -92,6 +113,9 @@ const Skills = () => {
               <motion.div
                 className="planet glass"
                 title={skill.name}
+                onMouseEnter={() => setSelectedSkill(skill)}
+                onMouseLeave={() => setSelectedSkill(null)}
+                onClick={() => setSelectedSkill(skill)}
                 style={{
                   width: planetSize, height: planetSize,
                   marginLeft: -planetSize / 2, marginTop: -planetSize / 2,
@@ -124,7 +148,14 @@ const Skills = () => {
                   <div className="planet-tooltip">
                     {skill.name}
                   </div>
-                  {skill.icon}
+                  {/* Floating child container to avoid CSS conflict */}
+                  <motion.div
+                    animate={{ y: [-2, 2, -2] }}
+                    transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut', delay: index * 0.1 }}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    {skill.icon}
+                  </motion.div>
                 </div>
               </motion.div>
             </div>
@@ -186,7 +217,6 @@ const Skills = () => {
     );
   };
 
-  // Render responsive mobile view
   if (isMobile) {
     return (
       <section id="skills" className="skills">
@@ -227,7 +257,7 @@ const Skills = () => {
 
           </div>
 
-          {/* Currently Exploring Grid for Mobile */}
+          {/* Exploring Grid for Mobile */}
           <div style={{ marginTop: '50px', paddingTop: '30px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
             <motion.h3 
               className="brand-font" 
@@ -254,14 +284,14 @@ const Skills = () => {
     );
   }
 
-  // Desktop Orbit View (Unchanged)
   return (
     <section id="skills" className="skills">
       <div className="container" ref={ref}>
         <motion.h2 
           className="section-title"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           Technical <span className="text-gradient">Galaxy</span>
         </motion.h2>
@@ -282,9 +312,37 @@ const Skills = () => {
               overflow: 'visible',
               borderRadius: '20px',
               background: 'rgba(255,255,255,0.01)',
-              border: '1px solid rgba(255,255,255,0.02)'
+              border: '1px solid rgba(255,255,255,0.02)',
+              x: smoothPX,
+              y: smoothPY
             }}
           >
+            {/* Pulsing Concentric Glowing Rings Behind Center Sun */}
+            <motion.div
+              style={{
+                position: 'absolute',
+                width: sunSize, height: sunSize,
+                borderRadius: '50%',
+                border: '1.5px solid var(--accent-purple)',
+                zIndex: 1,
+                pointerEvents: 'none'
+              }}
+              animate={{ scale: [1, 1.8, 1], opacity: [0.5, 0, 0.5] }}
+              transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
+            />
+            <motion.div
+              style={{
+                position: 'absolute',
+                width: sunSize, height: sunSize,
+                borderRadius: '50%',
+                border: '1.5px solid var(--accent-cyan)',
+                zIndex: 1,
+                pointerEvents: 'none'
+              }}
+              animate={{ scale: [1, 2.5, 1], opacity: [0.35, 0, 0.35] }}
+              transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut', delay: 1 }}
+            />
+
             <div 
               className="sun glass text-gradient brand-font"
               style={{
@@ -306,9 +364,97 @@ const Skills = () => {
             {renderOrbit(frontendSkills, r1, 24, false)}
             {renderOrbit(backendSkills, r2, 36, true)}
             {renderOrbit(databaseAndTools, r3, 48, false)}
+
+            {/* Interactive Scanner Information Panel */}
+            <AnimatePresence>
+              {selectedSkill && (
+                <motion.div
+                  initial={{ opacity: 0, x: 40, scale: 0.95 }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  exit={{ opacity: 0, x: 40, scale: 0.95 }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                  className="glass"
+                  style={{
+                    position: 'absolute',
+                    bottom: '20px',
+                    right: '20px',
+                    width: '320px',
+                    padding: '24px',
+                    zIndex: 100,
+                    border: '1px solid var(--accent-cyan)',
+                    background: 'rgba(5, 5, 8, 0.92)',
+                    backdropFilter: 'blur(20px)',
+                    borderRadius: '16px',
+                    textAlign: 'left',
+                    overflow: 'hidden'
+                  }}
+                >
+                  {/* Neon scan sweep animation line */}
+                  <motion.div
+                    style={{
+                      position: 'absolute',
+                      left: 0,
+                      right: 0,
+                      height: '2px',
+                      background: 'linear-gradient(90deg, transparent, var(--accent-cyan), transparent)',
+                      boxShadow: '0 0 10px var(--accent-cyan)',
+                      zIndex: 2,
+                      pointerEvents: 'none'
+                    }}
+                    animate={{ top: ['0%', '100%', '0%'] }}
+                    transition={{ repeat: Infinity, duration: 3, ease: 'linear' }}
+                  />
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '15px' }}>
+                    <span style={{ fontSize: '2rem', display: 'flex', alignItems: 'center' }}>
+                      {selectedSkill.icon}
+                    </span>
+                    <div>
+                      <h4 className="brand-font" style={{ margin: 0, fontSize: '1.2rem', color: '#fff', fontWeight: 600 }}>
+                        {selectedSkill.name}
+                      </h4>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600 }}>
+                        System Scanner Active
+                      </span>
+                    </div>
+                  </div>
+
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: '1.5', margin: '0 0 15px 0' }}>
+                    {selectedSkill.desc}
+                  </p>
+
+                  {selectedSkill.projects && selectedSkill.projects.length > 0 && (
+                    <div>
+                      <span style={{ fontSize: '0.75rem', color: '#fff', fontWeight: 600, textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>
+                        Used in Repositories:
+                      </span>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                        {selectedSkill.projects.map((proj, pIdx) => (
+                          <span 
+                            key={pIdx}
+                            style={{
+                              fontSize: '0.7rem',
+                              padding: '3px 8px',
+                              background: 'rgba(0, 240, 255, 0.06)',
+                              border: '1px solid rgba(0, 240, 255, 0.2)',
+                              color: 'var(--accent-cyan)',
+                              borderRadius: '10px'
+                            }}
+                          >
+                            {proj}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
           </motion.div>
         </div>
 
+        {/* Currently Exploring Grid */}
         <div style={{ marginTop: '80px', paddingTop: '40px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
           <motion.h3 
             className="section-title" 
@@ -335,6 +481,10 @@ const Skills = () => {
               >
                 <motion.div 
                   className="glass exploring-card"
+                  initial={{ opacity: 0, y: 25 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.1 }}
+                  transition={{ delay: idx * 0.06, duration: 0.5, ease: 'easeOut' }}
                   style={{
                     padding: '15px 25px',
                     borderRadius: '30px',
@@ -344,17 +494,43 @@ const Skills = () => {
                     gap: '12px',
                     border: '1px solid rgba(255,255,255,0.06)',
                     background: 'rgba(255, 255, 255, 0.015)',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    position: 'relative',
+                    overflow: 'hidden'
                   }}
-                  whileHover={{
-                    borderColor: 'var(--accent-purple)',
-                    boxShadow: '0 5px 15px rgba(157, 0, 255, 0.15)'
-                  }}
+                  whileHover="hover"
                 >
-                  <span style={{ fontSize: '1.6rem', display: 'flex', alignItems: 'center' }}>
+                  {/* Glowing Border Mask on Hover */}
+                  <motion.div
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      borderRadius: '30px',
+                      padding: '1.5px',
+                      background: 'linear-gradient(135deg, var(--accent-purple), var(--accent-cyan))',
+                      WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                      WebkitMaskComposite: 'xor',
+                      maskComposite: 'exclude',
+                      pointerEvents: 'none',
+                      opacity: 0,
+                      transition: 'opacity 0.4s ease'
+                    }}
+                    variants={{
+                      hover: { opacity: 1 }
+                    }}
+                  />
+
+                  {/* Icon floats gently */}
+                  <motion.span 
+                    variants={{
+                      hover: { rotate: 10, scale: 1.15 }
+                    }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 10 }}
+                    style={{ fontSize: '1.6rem', display: 'flex', alignItems: 'center', position: 'relative', zIndex: 2 }}
+                  >
                     {tech.icon}
-                  </span>
-                  <span style={{ color: '#fff', fontSize: '1rem', fontWeight: 600 }}>
+                  </motion.span>
+                  <span style={{ color: '#fff', fontSize: '1rem', fontWeight: 600, position: 'relative', zIndex: 2 }}>
                     {tech.name}
                   </span>
                 </motion.div>

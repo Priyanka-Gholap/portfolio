@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
 import Loader from './components/Loader';
 import Navbar from './components/Navbar';
 import CustomCursor from './components/CustomCursor';
@@ -16,6 +16,12 @@ import Contact from './components/Contact';
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   useEffect(() => {
     // Hide loader after 2000ms (to let loading bar complete and content expand/fade)
@@ -62,6 +68,21 @@ function App() {
         animate={{ opacity: loading ? 0 : 1 }}
         transition={{ duration: 0.8, delay: 0.2 }}
       >
+        <motion.div 
+          className="scroll-progress-bar"
+          style={{ 
+            scaleX,
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '4px',
+            background: 'var(--gradient-neon)',
+            transformOrigin: '0%',
+            zIndex: 99999,
+            boxShadow: '0 0 10px var(--accent-cyan)'
+          }}
+        />
         <CustomCursor />
         <Navbar />
         <Background />
@@ -76,9 +97,21 @@ function App() {
           <DevelopmentActivity />
           <Contact />
         </main>
-        <footer>
-          <p>&copy; {new Date().getFullYear()} Priyanka S. Gholap. Built with React, Framer Motion & CSS Grid.</p>
-        </footer>
+        <motion.footer
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+        >
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+          >
+            &copy; {new Date().getFullYear()} Priyanka S. Gholap. Built with React, Framer Motion & CSS Grid.
+          </motion.p>
+        </motion.footer>
       </motion.div>
     </>
   );
