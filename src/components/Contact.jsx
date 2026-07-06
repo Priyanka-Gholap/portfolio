@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt, FaFileAlt, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
@@ -10,6 +10,17 @@ const FloatingInput = ({ label, id, name, type = "text", required, placeholder, 
   const [value, setValue] = useState("");
 
   const active = focused || value.length > 0;
+
+  useEffect(() => {
+    const form = document.querySelector('.contact-form');
+    if (!form) return;
+    const handleReset = () => {
+      setValue("");
+      setFocused(false);
+    };
+    form.addEventListener('reset', handleReset);
+    return () => form.removeEventListener('reset', handleReset);
+  }, []);
 
   return (
     <motion.div 
@@ -61,6 +72,17 @@ const FloatingTextarea = ({ label, id, name, required, placeholder, inView, dela
   const [value, setValue] = useState("");
 
   const active = focused || value.length > 0;
+
+  useEffect(() => {
+    const form = document.querySelector('.contact-form');
+    if (!form) return;
+    const handleReset = () => {
+      setValue("");
+      setFocused(false);
+    };
+    form.addEventListener('reset', handleReset);
+    return () => form.removeEventListener('reset', handleReset);
+  }, []);
 
   return (
     <motion.div 

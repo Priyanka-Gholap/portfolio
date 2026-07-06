@@ -234,7 +234,7 @@ const Hero = () => {
               View My Work
             </motion.a>
             <motion.a 
-              href="mailto:priyankagholap182@gmail.com" 
+              href="#contact" 
               className="btn btn-secondary"
               whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(157, 0, 255, 0.3)' }}
               whileTap={{ scale: 0.95 }}

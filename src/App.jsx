@@ -109,7 +109,7 @@ function App() {
             viewport={{ once: true }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
-            &copy; {new Date().getFullYear()} Priyanka S. Gholap. Built with React, Framer Motion & CSS Grid.
+            &copy; {new Date().getFullYear()} Priyanka S. Gholap.
           </motion.p>
         </motion.footer>
       </motion.div>
