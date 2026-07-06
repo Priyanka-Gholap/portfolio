@@ -66,9 +66,32 @@ const Navbar = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="logo"
+          className="logo brand-font"
+          style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
+          whileHover={{ scale: 1.05 }}
         >
-          Priyanka<span className="text-gradient">.dev</span>
+          {/* Animated Glowing Code Logo Badge */}
+          <motion.div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'rgba(0, 240, 255, 0.06)',
+              border: '1px solid rgba(0, 240, 255, 0.3)',
+              borderRadius: '8px',
+              padding: '4px 8px',
+              color: 'var(--accent-cyan)',
+              fontSize: '0.9rem',
+              fontWeight: '800',
+              boxShadow: '0 0 12px rgba(0, 240, 255, 0.2)',
+              fontFamily: 'monospace'
+            }}
+            animate={{ rotate: [0, -8, 8, 0] }}
+            transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
+          >
+            &lt;/&gt;
+          </motion.div>
+          <span>Priyanka<span className="text-gradient">.dev</span></span>
         </motion.div>
         
         {/* Desktop Navigation */}
